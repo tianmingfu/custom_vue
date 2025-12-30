@@ -1,0 +1,127 @@
+import { extend, isArray } from '@vue/shared'
+
+import { createDep, Dep } from './dep'
+
+export type EffectScheduler = (...args: any[]) => any
+
+type KeyToDepMap = Map<any, Dep>
+/**
+ * 收集所有依赖的 WeakMap 实例：
+ * 1. `key`：响应性对象
+ * 2. `value`：`Map` 对象
+ * 		1. `key`：响应性对象的指定属性
+ * 		2. `value`：指定对象的指定属性的 执行函数
+ */
+const targetMap = new WeakMap<any, KeyToDepMap>()
+
+/**
+ * 用于收集依赖的方法
+ * @param target WeakMap 的 key
+ * @param key 代理对象的 key，当依赖被触发时，需要根据该 key 获取
+ */export function track(target: object, key: unknown) {
+    if (!activeEffect) {
+      return
+    }
+   let depsMap = targetMap.get(target)
+   if (!depsMap) {
+     targetMap.set(target, (depsMap = new Map()))
+   }
+   let dep = depsMap.get(key) 
+   if (!dep) {
+     depsMap.set(key, (dep = createDep()))
+   }
+   trackEffects(dep)
+}
+
+/**
+ * 利用 dep 依次跟踪指定 key 的所有 effect
+ * @param dep
+ */
+export function trackEffects(dep: Dep) {
+  dep.add(activeEffect!)
+}
+
+/**
+ * 触发依赖的方法
+ * @param target WeakMap 的 key
+ * @param key 代理对象的 key，当依赖被触发时，需要根据该 key 获取
+ */
+export function trigger(target: object, key?: unknown) {
+  const depsMap = targetMap.get(target)
+  if (!depsMap) return
+  const dep = depsMap.get(key)
+  if (!dep) return
+  triggerEffects(dep)
+}
+
+/**
+ * 依次触发 dep 中保存的依赖
+ */
+export function triggerEffects(dep: Dep) {
+  const effects = isArray(dep) ? dep : [...dep]
+  for (const effect of effects) {
+      triggerEffect(effect)
+  }
+}
+
+/**
+ * 触发指定的依赖
+ */
+export function triggerEffect(effect: ReactiveEffect) {
+  effect.fn()
+}
+
+
+
+/**
+ * 单例的，当前的 effect
+ */
+export let activeEffect: ReactiveEffect | undefined
+
+
+export class ReactiveEffect<T = any> {
+    constructor(
+        public fn: () => T,
+        public scheduler?: (...args: any[]) => void
+    ) {
+        
+    }
+
+    run() {
+         // 为 activeEffect 赋值
+    activeEffect = this
+         // 执行 fn 函数
+    return this.fn()
+    }
+
+    stop() {
+        
+    }
+}
+
+
+
+export interface ReactiveEffectOptions {
+  lazy?: boolean
+  scheduler?: EffectScheduler
+}
+
+/**
+ * effect 函数
+ * @param fn 执行方法
+ * @returns 以 ReactiveEffect 实例为 this 的执行函数
+ */
+export function effect<T = any>(fn: () => T, options?: ReactiveEffectOptions) {
+  // 生成 ReactiveEffect 实例
+  const _effect = new ReactiveEffect(fn)
+
+  // 存在 options，则合并配置对象
+  if (options) {
+    extend(_effect, options)
+  }
+
+  if (!options || !options.lazy) {
+    // 执行 run 函数
+    _effect.run()
+  }
+}

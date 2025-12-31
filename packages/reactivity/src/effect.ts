@@ -1,5 +1,5 @@
 import { extend, isArray } from '@vue/shared'
-
+import { ComputedRefImpl } from './computed'
 import { createDep, Dep } from './dep'
 
 export type EffectScheduler = (...args: any[]) => any
@@ -68,10 +68,12 @@ export function triggerEffects(dep: Dep) {
  * 触发指定的依赖
  */
 export function triggerEffect(effect: ReactiveEffect) {
-  effect.fn()
-}
-
-
+  if (effect.scheduler) {
+    effect.scheduler()
+  } else {
+    effect.run()
+  }
+} 
 
 /**
  * 单例的，当前的 effect
@@ -80,9 +82,14 @@ export let activeEffect: ReactiveEffect | undefined
 
 
 export class ReactiveEffect<T = any> {
+  
+  /**
+   * 存在该属性，则表示当前的 effect 为计算属性的 effect
+   */
+    computed?: ComputedRefImpl<T>
     constructor(
         public fn: () => T,
-        public scheduler?: (...args: any[]) => void
+        public scheduler: EffectScheduler | null = null
     ) {
         
     }

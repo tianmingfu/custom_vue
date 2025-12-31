@@ -88,10 +88,10 @@ export class ReactiveEffect<T = any> {
     }
 
     run() {
-         // 为 activeEffect 赋值
-    activeEffect = this
-         // 执行 fn 函数
-    return this.fn()
+      // 为 activeEffect 赋值
+      activeEffect = this
+      // 执行 fn 函数
+      return this.fn()
     }
 
     stop() {

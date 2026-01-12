@@ -37,7 +37,7 @@ function createReactiveObject(
 	// 未被代理则生成 proxy 实例
 	const proxy = new Proxy(target, baseHandlers)
 	// 为 Reactive 增加标记
-	// proxy[ReactiveFlags.IS_REACTIVE] = true
+	proxy[ReactiveFlags.IS_REACTIVE] = true
 
 	// 缓存代理对象
 	proxyMap.set(target, proxy)

@@ -5,6 +5,7 @@ import { isArray, isObject, isString } from '.'
  */
 export function normalizeClass(value: unknown): string {
 	let res = ''
+	debugger
 	// 判断是否为 string，如果是 string 就不需要专门处理
 	if (isString(value)) {
 		res = value

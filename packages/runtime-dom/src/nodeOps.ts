@@ -43,6 +43,7 @@ export const nodeOps = {
 	 * 设置 text
 	 */
 	setText: (node, text) => {
+		debugger
 		node.nodeValue = text
 	},
 

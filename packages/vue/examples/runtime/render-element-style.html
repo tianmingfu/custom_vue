@@ -7,12 +7,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <script src="../../dist/vue.js"></script>
-
-  <style>
-    .red {
-      color: red;
-    }
-  </style>
 </head>
 
 <body>
@@ -22,12 +16,22 @@
   const { h, render } = Vue
 
   const vnode = h('div', {
-    class: {
-      'red': true
-    }
-  }, '增强的 class')
+    style: {
+      color: 'red'
+    },
+  }, '你好，世界')
+  // 挂载
+  render(vnode, document.querySelector('#app'))
 
-  console.log(vnode);
+  setTimeout(() => {
+    const vnode2 = h('div', {
+      style: {
+        fontSize: '32px'
+      },
+    }, '你好，世界')
+    // 挂载
+    render(vnode2, document.querySelector('#app'))
+  }, 2000);
 </script>
 
 </html>

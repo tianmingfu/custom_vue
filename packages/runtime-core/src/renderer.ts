@@ -87,6 +87,7 @@ function baseCreateRenderer(options: RendererOptions): any {
    * Text 的打补丁操作
    */
   const processText = (oldVNode, newVNode, container, anchor) => {
+    debugger
     // 不存在旧的节点，则为 挂载 操作
     if (oldVNode == null) {
       // 生成节点

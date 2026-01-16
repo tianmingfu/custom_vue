@@ -7,12 +7,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <script src="../../dist/vue.js"></script>
-
-  <style>
-    .red {
-      color: red;
-    }
-  </style>
 </head>
 
 <body>
@@ -21,13 +15,20 @@
 <script>
   const { h, render } = Vue
 
-  const vnode = h('div', {
-    class: {
-      'red': true
+  const component = {
+    data() {
+      return {
+        msg: 'hello component'
+      }
+    },
+    render() {
+      return h('div', this.msg)
     }
-  }, '增强的 class')
+  }
 
-  console.log(vnode);
+  const vnode = h(component)
+  // 挂载
+  render(vnode, document.querySelector('#app'))
 </script>
 
 </html>

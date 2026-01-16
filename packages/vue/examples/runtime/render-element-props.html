@@ -7,27 +7,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <script src="../../dist/vue.js"></script>
-
-  <style>
-    .red {
-      color: red;
-    }
-  </style>
 </head>
 
-<body>
+<body> 
   <div id="app"></div>
 </body>
 <script>
   const { h, render } = Vue
 
-  const vnode = h('div', {
-    class: {
-      'red': true
-    }
-  }, '增强的 class')
-
-  console.log(vnode);
+  const vnode = h('textarea', {
+    class: 'test-class',
+    value: 'textarea value',
+    type: 'text'
+  })
+  // 挂载
+  render(vnode, document.querySelector('#app'))
 </script>
 
 </html>

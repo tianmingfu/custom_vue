@@ -7,27 +7,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <script src="../../dist/vue.js"></script>
-
-  <style>
-    .red {
-      color: red;
-    }
-  </style>
 </head>
 
 <body>
   <div id="app"></div>
 </body>
 <script>
-  const { h, render } = Vue
+  const { reactive, h, render } = Vue
 
-  const vnode = h('div', {
-    class: {
-      'red': true
+  const component = {
+    setup() {
+      const obj = reactive({
+        name: '张三'
+      })
+
+      setTimeout(() => {
+        obj.name = '李四'
+      }, 2000);
+
+      return () => h('div', obj.name)
     }
-  }, '增强的 class')
+  }
 
-  console.log(vnode);
+  const vnode = h(component)
+  // 挂载
+  render(vnode, document.querySelector('#app'))
 </script>
 
 </html>

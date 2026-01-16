@@ -17,12 +17,25 @@
 
   const component = {
     render() {
-      const vnode1 = h('div', '这是一个 component')
-      return vnode1
+      return h('div', 'hello component')
     }
   }
-  const vnode2 = h(component)
-  console.log(vnode2);
+
+  const vnode = h(component)
+  // 挂载
+  render(vnode, document.querySelector('#app'))
+
+  setTimeout(() => {
+    const component2 = {
+      render() {
+        return h('div', '你好，世界')
+      }
+    }
+
+    const vnode2 = h(component2)
+    // 挂载
+    render(vnode2, document.querySelector('#app'))
+  }, 2000);
 </script>
 
 </html>

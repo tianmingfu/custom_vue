@@ -16,13 +16,25 @@
   const { h, render } = Vue
 
   const component = {
+    data() {
+      return {
+        msg: 'hello component'
+      }
+    },
     render() {
-      const vnode1 = h('div', '这是一个 component')
-      return vnode1
+      return h('div', this.msg)
+    },
+    // 组件实例处理完所有与状态相关的选项之后
+    created() {
+      setTimeout(() => {
+        this.msg = '你好，世界'
+      }, 2000);
     }
   }
-  const vnode2 = h(component)
-  console.log(vnode2);
+
+  const vnode = h(component)
+  // 挂载
+  render(vnode, document.querySelector('#app'))
 </script>
 
 </html>

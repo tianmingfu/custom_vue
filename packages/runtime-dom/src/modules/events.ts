@@ -20,6 +20,7 @@ export function patchEvent(
 		const name = parseName(rawName)
 		if (nextValue) {
 			// add
+			debugger
 			const invoker = (invokers[rawName] = createInvoker(nextValue))
 			el.addEventListener(name, invoker)
 		} else if (existingInvoker) {

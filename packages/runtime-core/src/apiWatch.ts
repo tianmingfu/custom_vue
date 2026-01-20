@@ -42,6 +42,7 @@ function doWatch(
 
 	// 存在回调函数和deep
 	if (cb && deep) {
+		// TODO
 		const baseGetter = getter
 		getter = () => traverse(baseGetter())
 	}
@@ -96,11 +97,3 @@ export function traverse(value: unknown, seen?: Set<unknown>) {
 	}
 	return value
 }
-
-// traverse 遍历普通嵌套对象（无循环引用）示例 
-// const obj = {
-//   name: 'vue',
-//   user: { age: 3 },
-//   arr: [1, { a: 2 }]
-// }
-// traverse(obj)

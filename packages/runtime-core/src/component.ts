@@ -1,5 +1,6 @@
 import { reactive } from '@vue/reactivity'
 import { isFunction, isObject } from '@vue/shared'
+import { onBeforeMount, onMounted } from './apiLifecycle'
 
 let uid = 0
 
@@ -122,7 +123,9 @@ function applyOptions(instance: any) {
 		register(hook?.bind(instance.data), instance)
 	}
 
-
+	// 注册 hooks
+	registerLifecycleHook(onBeforeMount, beforeMount)
+	registerLifecycleHook(onMounted, mounted)
 }
 
 /**
